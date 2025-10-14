@@ -1,12 +1,12 @@
-from pathlib import Path
+
 
 templates = {
-    "asset_type" : ".../fileExplorer/Task/Asset/Character",
-    "asset_name" : "..."
+    "asset_type" : {"glob": "Asset/*",
+                    "regex": 'Asset/(?P<asset_type>.*)',
+                    },
+    "asset_name" : {"glob": "Asset/*/*",
+                    "regex": 'Asset/(?P<asset_type>.*)/(?P<asset_name>.*)',
+                    },
 }
 
-found = Path("C:/").glob("Users/enzo.lahana/PycharmProjects/FatePipe")
-print(list(found))
-
-for f in found:
-    print(f)
+root = "C:/Users/enzo.lahana/PycharmProjects/FatePipe/fileExplorer/Task"
