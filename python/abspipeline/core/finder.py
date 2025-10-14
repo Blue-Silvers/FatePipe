@@ -1,10 +1,23 @@
 from pathlib import Path
 from abspipeline import conf
-print(conf.root)
+from abspipeline.libs import utils
 
-def find(glob_template):
+
+def find(glob_template, **filters):
+    print(filters)
 
     glob_expression = conf.templates.get(glob_template).get("glob")
+    print(glob_expression)
+
+
+    keys = utils.get_pattern_keys(glob_expression)
+    formatter = {key: "*" for key in keys}
+    if filters:
+        formatter.update(filters)
+
+    glob_expression = glob_expression.format(**formatter)
+
+
     found = Path(conf.root).glob(glob_expression)
     print(f"search: {glob_template}")
     return list(found)
@@ -18,8 +31,16 @@ if __name__ == "__main__":
 
     print("Main test starting...")
      # test glob
-    glob_template = conf.templates.get("asset_type").get("glob")
-    print(find(glob_template))
+
+    search_type_input ="asset_name"
+    print(find("asset_name", filters={"asset_type": 'Prop', "asset_name": "Model"}))
+
+    # search = "asset_type"
+    # print(find(search))
+    # search = "asset_name"
+    # print(find(search, filters={"asset_type": "Prop", "asset_name": "Model"}))
+    # print(find(search, filters={"asset_type": "Prop", "asset_name": "Texture"}))
+
 
     # glob_template = templates.get("asset_type").get("glob")
     # found = Path(root).glob(glob_template)
