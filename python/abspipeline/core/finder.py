@@ -37,7 +37,7 @@ def find(search_type: str, filters: Optional[dict [str, str]] = None) -> list[En
     entities = []
     for path in found:
         data = resolve.resolve(entity_type= search_type, path= path)
-        if data is None:
+        if data:
             entities.append(Entity(type= search_type, data= data))
 
     return entities
