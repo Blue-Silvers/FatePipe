@@ -1,27 +1,38 @@
 import re
-from dataclasses import field
+from pathlib import Path
 
-import abspipeline
+from abspipeline import conf
 
 path = 'fileExplorer/Task/Asset/Character/Model'
 pattern = 'fileExplorer/Task/Asset/(?P<asset_type>.*)/(?P<asset_name>.*)'
 
-r = re.compile(pattern)
 
-found = None
-for match in r.finditer(path):
-    found = match.groupdict()
+def resolve (entity_type: str, path: Path) -> dict[str, str]:
+    """
+    resolve entity type
 
-# list comprehension
-found = [match.groupdict() for match in r.finditer(path)]
+    Args:
+        entity_type: entity type
+        pathP: dict of path
 
-if found:
-    result = found[0]
-    print(f"match: {result}")
+    Returns:
+        dict of string - string
 
+    """
 
+    pattern = conf.templates.get(entity_type).get("regex")
+    path = path.as_posix()
+    re_pattern = re.compile(pattern)
+    match = re_pattern.search(str(path))
+    res = {}
 
-print("_"*50)
+    if match:
+        res = match.groupdict()
 
-def resolve (entity_type, path):
-    return "test"
+    return res
+
+# if __name__ == "__main__":
+#     entity_type = "asset_type"
+#     path = Path("Asset/Character/Model")
+#     result = resolve(entity_type, path)
+#     print(result)

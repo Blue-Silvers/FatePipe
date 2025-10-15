@@ -1,14 +1,27 @@
 from pathlib import Path
+from typing import Optional
+
 from abspipeline import conf
+from abspipeline.core.dt.entity import Entity
 from abspipeline.libs import utils
 
+from abspipeline.core import resolve
 
-def find(glob_template, **filters):
-    print(filters)
 
-    glob_expression = conf.templates.get(glob_template).get("glob")
-    print(glob_expression)
+def find(search_type: str, filters: Optional[dict [str, str]] = None) -> list[Entity]:
+    """
+    For a given type and filter, return a list of Entity instances matching the filters
 
+    Args:
+        search_type: search type
+        filters: dict of filter
+
+    Returns:
+        list of Entity instances
+
+    """
+
+    glob_expression = conf.templates.get(search_type).get("glob")
 
     keys = utils.get_pattern_keys(glob_expression)
     formatter = {key: "*" for key in keys}
@@ -19,47 +32,34 @@ def find(glob_template, **filters):
 
 
     found = Path(conf.root).glob(glob_expression)
-    print(f"search: {glob_template}")
-    return list(found)
+    print(f"search: {search_type}")
+
+    entities = []
+    for path in found:
+        data = resolve.resolve(entity_type= search_type, path= path)
+        if data is None:
+            entities.append(Entity(type= search_type, data= data))
+
+    return entities
 
 
-
-
-#resolve(templates.get("asset_type").get("glob"),templates.get("asset_type").get("regex") )
 
 if __name__ == "__main__":
 
+    from pprint import pprint
+
     print("Main test starting...")
-     # test glob
 
-    search_type_input ="asset_name"
-    print(find("asset_name", filters={"asset_type": 'Prop', "asset_name": "Model"}))
-
-    # search = "asset_type"
-    # print(find(search))
-    # search = "asset_name"
-    # print(find(search, filters={"asset_type": "Prop", "asset_name": "Model"}))
-    # print(find(search, filters={"asset_type": "Prop", "asset_name": "Texture"}))
-
-
-    # glob_template = templates.get("asset_type").get("glob")
-    # found = Path(root).glob(glob_template)
-    # print(f"search: {glob_template}")
-    #
-    # for f in found:
-    #     print(f)
-    #
-    #     glob_template = templates.get("asset_name").get("glob")
-    #
-    # # test glob
-    # glob_template = templates.get("asset_type").get("glob")
-    # print(find(glob_template))
-    # glob_template = templates.get("asset_name").get("glob")
-    # print(find(glob_template))
-
-    entity = ("asset_name",
-              {"type": "Asset",
-               "asset_type": "Character",
-               "asset_name": "Model"})
-
+    search_type_input = find("asset_name", {"asset_type": 'Prop', "asset_name": "Model"})
+    print(search_type_input)
     print("_" * 50)
+    search_type_input = find("asset_name", {"asset_type": 'Prop'})
+    pprint(search_type_input)
+    print("_" * 50)
+    search_type_input = find("asset_name")
+    pprint(search_type_input)
+    print("_" * 100)
+    # path = Path("Asset/Character/Model")
+    # search_type_input = resolve.resolve("asset_name", find("asset_name", {"asset_type": 'Prop'}))
+    # #search_type_input = find("asset_name", resolve.resolve("asset_name", path) )
+    # pprint(search_type_input)
