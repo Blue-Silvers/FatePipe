@@ -3,8 +3,8 @@ from pathlib import Path
 
 from abspipeline import conf
 
-path = 'fileExplorer/Task/Asset/Character/Model'
-pattern = 'fileExplorer/Task/Asset/(?P<asset_type>.*)/(?P<asset_name>.*)'
+path = 'fileExplorer/Task/Asset/Character/Model/v010/Publish'
+pattern = 'fileExplorer/Task/Asset/(?P<asset_type>.*)/(?P<asset_name>.*)/(?P<asset_task>.*)/(?P<asset_version>.*)'
 
 
 def resolve (entity_type: str, path: Path) -> dict[str, str]:

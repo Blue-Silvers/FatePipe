@@ -10,7 +10,6 @@ ui_path = os.path.join(os.path.dirname(__file__), "qt/browser.ui")
 
 from abspipeline.core import finder
 
-
 class Browser(QtWidgets.QMainWindow):
     # cb = QtWidgets.QApplication.clipboard()  # exemple de clipboard
 
@@ -18,6 +17,10 @@ class Browser(QtWidgets.QMainWindow):
         super(Browser, self).__init__()
         loadUi(ui_path, self)
         self.setWindowTitle(f"{conf.browser_title} - Browser")
+
+        self.pb_asset.clicked.connect(self.on_asset_clicked)
+        self.pb_shot.clicked.connect(self.on_shot_clicked)
+
         self.populate()
 
     def fill_asset_type(self):
@@ -25,36 +28,20 @@ class Browser(QtWidgets.QMainWindow):
         pass
 
     def populate(self):
-        # path = os.path.abspath(".../FatePipe/fileExplorer/Task/*")
+
+        self.lw_asset_type.itemClicked.connect(self.on_asset_type_clicked) #connect label to function
+        self.lw_asset_name.itemClicked.connect(self.on_asset_name_clicked)
+        self.lw_asset_task.itemClicked.connect(self.on_asset_task_clicked)
+        self.lw_asset_item.itemClicked.connect(self.on_asset_version_clicked)
+        self.pb_asset.setStyleSheet(
+            "background-color: #071e26;"
+        )
 
         entities = finder.find("asset_type")
-
-        # if not os.path.isdir(path):
-        #     return
-
-        # for item in os.listdir(path):
-        #     item_path = os.path.join(path, item)
-        #     if os.path.isdir(item_path):
-        #         icon = self.style().standardIcon(QtWidgets.QStyle.SP_DirIcon)
-        #     else:
-        #         icon = self.style().standardIcon(QtWidgets.QStyle.SP_FileIcon)
-        #
-        #     list_item = QtWidgets.QListWidgetItem(icon, item)
-        #     list_item.setData(QtCore.Qt.UserRole, item_path)
-        #     self.lw_asset_type.addItem(list_item)
 
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_type, entity, entity.data["asset_type"])
 
-            # list_item = QtWidgets.QListWidgetItem()
-            # list_item.setText(entity.data["asset_type"])
-            #
-            # list_item2 = QtWidgets.QListWidgetItem()
-            # list_item2.setText(entity.data["asset_name"])
-            #
-            # #list_item.setData(QtCore.Qt.UserRole, item_path)
-            # self.lw_asset_type.addItem(list_item)
-            # self.lw_asset_name.addItem(list_item2)
 
     def addListWidgetItem(self,listWidget, data, label):
         item = QtWidgets.QListWidgetItem()
@@ -62,6 +49,150 @@ class Browser(QtWidgets.QMainWindow):
         item.setText(label)
         listWidget.addItem(item)
         return item
+
+    def on_asset_clicked(self):
+
+        self.pb_asset.setStyleSheet(
+            "background-color: #071e26;"
+        )
+        self.pb_shot.setStyleSheet(
+            "background-color: #7D9191;"
+        )
+
+        self.lw_asset_type.clear()
+        self.lw_asset_name.clear()
+        self.lw_asset_task.clear()
+        self.lw_asset_version.clear()
+        self.lw_asset_item.clear()
+
+        self.lw_asset_type.itemClicked.connect(self.on_asset_type_clicked) #connect label to function
+        self.lw_asset_name.itemClicked.connect(self.on_asset_name_clicked)
+        self.lw_asset_task.itemClicked.connect(self.on_asset_task_clicked)
+        self.lw_asset_item.itemClicked.connect(self.on_asset_version_clicked)
+
+        entities = finder.find("asset_type")
+
+        for entity in entities:
+            self.addListWidgetItem(self.lw_asset_type, entity, entity.data["asset_type"])
+
+    def on_shot_clicked(self):
+
+        self.pb_shot.setStyleSheet(
+            "background-color: #071e26;"
+        )
+        self.pb_asset.setStyleSheet(
+            "background-color: #7D9191;"
+        )
+
+        self.lw_asset_type.clear()
+        self.lw_asset_name.clear()
+        self.lw_asset_task.clear()
+        self.lw_asset_version.clear()
+        self.lw_asset_item.clear()
+
+        self.lw_asset_type.itemClicked.connect(self.on_shot_type_clicked) #connect label to function
+        self.lw_asset_name.itemClicked.connect(self.on_shot_name_clicked)
+        self.lw_asset_task.itemClicked.connect(self.on_shot_task_clicked)
+        self.lw_asset_item.itemClicked.connect(self.on_shot_version_clicked)
+
+        entities = finder.find("shot_type")
+
+        for entity in entities:
+            self.addListWidgetItem(self.lw_asset_type, entity, entity.data["shot_type"])
+
+#Asset clicked
+    def on_asset_type_clicked(self, item):
+        label = item.text()
+
+        self.lw_asset_name.clear()
+        self.lw_asset_task.clear()
+        self.lw_asset_version.clear()
+        self.lw_asset_item.clear()
+
+        entities = finder.find("asset_name", {"asset_type": label})
+
+        for entity in entities:
+            self.addListWidgetItem(self.lw_asset_name, entity, entity.data["asset_name"])
+
+    def on_asset_name_clicked(self, item):
+        itemData = item.data(QtCore.Qt.UserRole)
+
+        self.lw_asset_task.clear()
+        self.lw_asset_version.clear()
+        self.lw_asset_item.clear()
+
+        entities = finder.find("asset_task", itemData.data)
+
+        for entity in entities:
+            self.addListWidgetItem(self.lw_asset_task, entity, entity.data["asset_task"])
+
+    def on_asset_task_clicked(self, item):
+        itemData = item.data(QtCore.Qt.UserRole)
+
+        self.lw_asset_version.clear()
+        self.lw_asset_item.clear()
+
+        entities = finder.find("asset_version", itemData.data)
+
+        for entity in entities:
+            self.addListWidgetItem(self.lw_asset_version, entity, entity.data["asset_version"])
+
+    def on_asset_version_clicked(self, item):
+        itemData = item.data(QtCore.Qt.UserRole)
+
+        self.lw_asset_item.clear()
+
+        entities = finder.find("asset_version", itemData.data)
+
+        for entity in entities:
+            self.addListWidgetItem(self.lw_asset_item, entity, entity.data["asset_version"])
+
+#Shot clicked
+    def on_shot_type_clicked(self, item):
+        label = item.text()
+
+        self.lw_asset_name.clear()
+        self.lw_asset_task.clear()
+        self.lw_asset_version.clear()
+        self.lw_asset_item.clear()
+
+        entities = finder.find("shot_name", {"shot_type": label})
+
+        for entity in entities:
+            self.addListWidgetItem(self.lw_asset_name, entity, entity.data["shot_name"])
+
+    def on_shot_name_clicked(self, item):
+        itemData = item.data(QtCore.Qt.UserRole)
+
+        self.lw_asset_task.clear()
+        self.lw_asset_version.clear()
+        self.lw_asset_item.clear()
+
+        entities = finder.find("shot_task", itemData.data)
+
+        for entity in entities:
+            self.addListWidgetItem(self.lw_asset_task, entity, entity.data["shot_task"])
+
+    def on_shot_task_clicked(self, item):
+        itemData = item.data(QtCore.Qt.UserRole)
+
+        self.lw_asset_version.clear()
+        self.lw_asset_item.clear()
+
+        entities = finder.find("shot_version", itemData.data)
+
+        for entity in entities:
+            self.addListWidgetItem(self.lw_asset_version, entity, entity.data["shot_version"])
+
+    def on_shot_version_clicked(self, item):
+        itemData = item.data(QtCore.Qt.UserRole)
+
+        self.lw_asset_item.clear()
+
+        entities = finder.find("shot_version", itemData.data)
+
+        for entity in entities:
+            self.addListWidgetItem(self.lw_asset_item, entity, entity.data["shot_version"])
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>653</width>
+    <width>989</width>
     <height>601</height>
    </rect>
   </property>
@@ -14,8 +14,72 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">*{
+border: none;
+background-color: transparent;
+color: #fff;
+}
+
+#centralwidget{
+background-color: #040f13;
+}
+
+QListWidget{
+background-color: #071e26;
+border-radius: 20px;
+}
+
+#frame_2{
+background-color: #071e26;
+border-radius: 20px;
+}
+#frame_3{
+background-color: #071e26;
+border-radius: 5px;
+}
+
+
+QPushButton{
+padding: 5px;
+background-color: #7D9191;
+border-radius: 5px;
+}
+
+#MainBody{
+background-color: #071e26;
+border-radius: 10px;
+}</string>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
+    <item row="2" column="0">
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QListWidget" name="lw_asset_type"/>
+       </item>
+       <item>
+        <widget class="QListWidget" name="lw_asset_name"/>
+       </item>
+       <item>
+        <widget class="QListWidget" name="lw_asset_task"/>
+       </item>
+       <item>
+        <widget class="QListWidget" name="lw_asset_version"/>
+       </item>
+       <item>
+        <widget class="QListWidget" name="lw_asset_item"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
      <widget class="QFrame" name="frame_3">
       <property name="frameShape">
        <enum>QFrame::Shape::StyledPanel</enum>
@@ -41,7 +105,7 @@
       </layout>
      </widget>
     </item>
-    <item row="0" column="0">
+    <item row="1" column="0">
      <widget class="QFrame" name="frame_2">
       <property name="frameShape">
        <enum>QFrame::Shape::StyledPanel</enum>
@@ -50,42 +114,39 @@
        <enum>QFrame::Shadow::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
+       <item row="0" column="1">
+        <widget class="QPushButton" name="pb_shot">
          <property name="font">
           <font>
            <family>Terminal</family>
-           <pointsize>15</pointsize>
+           <pointsize>20</pointsize>
+           <italic>false</italic>
+           <bold>true</bold>
+           <underline>false</underline>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="text">
+          <string>Shot Manager</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="pb_asset">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+           <pointsize>20</pointsize>
+           <italic>false</italic>
+           <bold>true</bold>
+           <underline>false</underline>
+           <strikeout>false</strikeout>
           </font>
          </property>
          <property name="text">
           <string>Asset manager</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
-         </property>
         </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QFrame" name="frame">
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QListWidget" name="lw_asset_type"/>
-       </item>
-       <item>
-        <widget class="QListWidget" name="lw_asset_name"/>
-       </item>
-       <item>
-        <widget class="QListWidget" name="lw_asset_task"/>
        </item>
       </layout>
      </widget>
@@ -97,7 +158,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>653</width>
+     <width>989</width>
      <height>33</height>
     </rect>
    </property>
