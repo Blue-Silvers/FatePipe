@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>989</width>
-    <height>601</height>
+    <width>993</width>
+    <height>609</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,16 +89,28 @@ border-radius: 10px;
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="pb_open">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
          <property name="text">
-          <string>Ok</string>
+          <string>Open</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="pb_delete">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
          <property name="text">
-          <string>Close</string>
+          <string>Delete</string>
          </property>
         </widget>
        </item>
@@ -158,7 +170,7 @@ border-radius: 10px;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>989</width>
+     <width>993</width>
      <height>33</height>
     </rect>
    </property>
