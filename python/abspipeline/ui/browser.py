@@ -55,6 +55,7 @@ class Browser(QtWidgets.QMainWindow):
         listWidget.addItem(item)
         return item
 
+#Button
     def activate_item_button(self):
         self.pb_open.setEnabled(True)
         self.pb_delete.setEnabled(True)
@@ -268,8 +269,7 @@ class Browser(QtWidgets.QMainWindow):
                     os.startfile(file_path)
                 print(f"Open : {file_path}")
             else:
-                print(f"fail : {file_path}")
-                #QtWidgets.QMessageBox.warning(self, "Erreur")
+                print(f"Fail to open : {file_path}")
 
     def delete_selected_asset(self):
         if hasattr(self, "selected_item") and self.selected_item:
@@ -291,7 +291,7 @@ class Browser(QtWidgets.QMainWindow):
                 except Exception as e:
                     QtWidgets.QMessageBox.warning(self, "Erreur", f"Item can't deleted : {e}")
 
-
+#Main
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = Browser()

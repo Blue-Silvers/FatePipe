@@ -1,4 +1,4 @@
-
+import os
 
 templates = {
     "asset_type" : {"glob": "Asset/{asset_type}",
@@ -36,4 +36,5 @@ templates = {
 
 # root = "C:/Users/enzo.lahana/PycharmProjects/FatePipe/fileExplorer/Task"
 #root = "C:/Users/fury8/PycharmProjects/FatePipe/fileExplorer/Task"
-root =  "C:/Users/enzo.lahana/Documents/PycharmProjects/FatePipe/fileExplorer/Task"
+#root =  "C:/Users/enzo.lahana/Documents/PycharmProjects/FatePipe/fileExplorer/Task"
+root = os.path.join(os.path.dirname(__file__), "../../../fileExplorer/Task")
