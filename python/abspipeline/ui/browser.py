@@ -78,6 +78,8 @@ class Browser(QtWidgets.QMainWindow):
     def on_asset_clicked(self):
         self.deactivate_item_button()
 
+        self.pb_asset.setEnabled(False)
+        self.pb_shot.setEnabled(True)
         self.pb_asset.setStyleSheet(
             "background-color: #071e26;"
         )
@@ -103,6 +105,8 @@ class Browser(QtWidgets.QMainWindow):
             self.addListWidgetItem(self.lw_asset_type, entity, entity.data["asset_type"])
 
     def on_shot_clicked(self):
+        self.pb_asset.setEnabled(True)
+        self.pb_shot.setEnabled(False)
         self.deactivate_item_button()
 
         self.pb_shot.setStyleSheet(
