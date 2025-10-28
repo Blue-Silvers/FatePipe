@@ -253,24 +253,28 @@ class Browser(QtWidgets.QMainWindow):
     def open_selected_asset(self):
         if hasattr(self, "selected_item") and self.selected_item:
             entity = self.selected_item.data(QtCore.Qt.UserRole)
-            file_path = entity.data.get(conf.templates.get("asset_item").get("regex"))
+            file_path = conf.root + "/" + conf.templates["asset_item"]["glob"].format(**entity.data)
             if not file_path:
-                file_path = entity.data.get(conf.templates.get("shot_item").get("regex"))
+                file_path = conf.root + "/" + conf.templates["shot_item"]["glob"].format(**entity.data)
+
+            file_path = os.path.normpath(file_path)
 
             if file_path and os.path.exists(file_path):
                 if os.name == "nt":
                     os.startfile(file_path)
                 print(f"Open : {file_path}")
             else:
-                QtWidgets.QMessageBox.warning(self, "Erreur")
+                print(f"fail : {file_path}")
+                #QtWidgets.QMessageBox.warning(self, "Erreur")
 
     def delete_selected_asset(self):
         if hasattr(self, "selected_item") and self.selected_item:
             entity = self.selected_item.data(QtCore.Qt.UserRole)
-            file_path = entity.data.get(conf.templates.get("asset_item").get("glob"))
+            file_path = conf.root + "/" + conf.templates["asset_item"]["glob"].format(**entity.data)
             if not file_path:
-                print("gdrhryk;u")
-                file_path = entity.data.get(conf.templates.get("shot_item").get("regex"))
+                file_path = conf.root + "/" + conf.templates["shot_item"]["glob"].format(**entity.data)
+
+            file_path = os.path.normpath(file_path)
 
             reply = QtWidgets.QMessageBox.question(self,  "Delete Asset",  f"Are you sure you want to delete {file_path} ?", QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
 
