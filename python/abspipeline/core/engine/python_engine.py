@@ -4,6 +4,11 @@ import os
 from abspipeline.core.engine.abstract_engine import AbstractEngine
 
 class PythonEngine(AbstractEngine):
+    actions: list = ["open","close"]
+
+    def close(self, path: Path) -> None:
+        print ("close")
+
     def open(self, path: Path) -> None:
         """
         open the given path

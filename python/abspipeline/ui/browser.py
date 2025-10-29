@@ -7,6 +7,7 @@ from qtpy.uic import loadUi
 
 ui_path = os.path.join(os.path.dirname(__file__), "qt/browser.ui")
 
+from abspipeline.ui import interact as handler
 
 from abspipeline.core import finder
 
@@ -57,6 +58,7 @@ class Browser(QtWidgets.QMainWindow):
 
 #Button
     def activate_item_button(self):
+
         self.pb_open.setEnabled(True)
         self.pb_delete.setEnabled(True)
         self.pb_open.setStyleSheet(
@@ -65,6 +67,10 @@ class Browser(QtWidgets.QMainWindow):
         self.pb_delete.setStyleSheet(
             "background-color: #7D9191;"
         )
+
+
+        if hasattr(self, "action_ui") and self.action_ui is not None:
+            self.action_ui.action_box.setVisible(False)
 
     def deactivate_item_button(self):
         self.pb_open.setEnabled(False)
@@ -75,6 +81,9 @@ class Browser(QtWidgets.QMainWindow):
         self.pb_delete.setStyleSheet(
             "background-color: #071e26;"
         )
+
+        if hasattr(self, "action_ui") and self.action_ui is not None:
+            self.action_ui.action_box.setVisible(False)
 
     def on_asset_clicked(self):
         self.deactivate_item_button()
@@ -193,6 +202,8 @@ class Browser(QtWidgets.QMainWindow):
         self.activate_item_button()
 
         self.selected_item = item
+        self.handler_buttons_asset()
+
 
 #Shot clicked
     def on_shot_type_clicked(self, item):
@@ -253,8 +264,29 @@ class Browser(QtWidgets.QMainWindow):
         self.activate_item_button()
 
         self.selected_item = item
+        self.handler_buttons_asset()
 
 #Open/delete button function
+    def handler_buttons_asset(self):
+
+        if hasattr(self, "selected_item") and self.selected_item:
+
+            entity = self.selected_item.data(QtCore.Qt.UserRole)
+            file_path = conf.root + "/" + conf.templates["asset_item"]["glob"].format(**entity.data)
+            if not file_path:
+                file_path = conf.root + "/" + conf.templates["shot_item"]["glob"].format(**entity.data)
+
+            file_path = os.path.normpath(file_path)
+
+            action_ui = handler.interact()
+            action_ui.init(action_ui, self.hbl_handler)
+
+            selection = handler.Path(file_path)
+
+            action_ui.update(selection)
+            self.action_ui = action_ui
+
+
     def open_selected_asset(self):
         if hasattr(self, "selected_item") and self.selected_item:
             entity = self.selected_item.data(QtCore.Qt.UserRole)
@@ -264,12 +296,14 @@ class Browser(QtWidgets.QMainWindow):
 
             file_path = os.path.normpath(file_path)
 
+
             if file_path and os.path.exists(file_path):
                 if os.name == "nt":
                     os.startfile(file_path)
                 print(f"Open : {file_path}")
             else:
                 print(f"Fail to open : {file_path}")
+
 
     def delete_selected_asset(self):
         if hasattr(self, "selected_item") and self.selected_item:

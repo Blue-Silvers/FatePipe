@@ -8,3 +8,5 @@ class AbstractEngine:
     def explore(self, path: Path) -> None:
         pass
 
+    def close(self, path: Path) -> None:
+        pass

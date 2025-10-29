@@ -4,6 +4,8 @@ import maya.cmds as cmds
 
 class MayaEngine(PythonEngine):
 
+    actions: list = ["open", "reference"]
+
     def open(self, path: Path) -> None:
         cmds.file(path, open=True, force=True)
 
