@@ -24,7 +24,8 @@ class Browser(QtWidgets.QMainWindow):
 
         self.pb_open.clicked.connect(self.open_selected_asset)
         self.pb_delete.clicked.connect(self.delete_selected_asset)
-        self.deactivate_item_button()
+        self.pb_folder.clicked.connect(self.create_folder)
+        self.deactivate_folder_button()
 
         self.populate()
 
@@ -50,6 +51,8 @@ class Browser(QtWidgets.QMainWindow):
 
 
     def addListWidgetItem(self,listWidget, data, label):
+        self.selected_list = listWidget  #####
+        self.selected_entity = data
         item = QtWidgets.QListWidgetItem()
         item.setData(QtCore.Qt.UserRole, data)
         item.setText(label)
@@ -61,11 +64,15 @@ class Browser(QtWidgets.QMainWindow):
 
         self.pb_open.setEnabled(True)
         self.pb_delete.setEnabled(True)
+        self.pb_folder.setEnabled(False)
         self.pb_open.setStyleSheet(
             "background-color: #7D9191;"
         )
         self.pb_delete.setStyleSheet(
             "background-color: #7D9191;"
+        )
+        self.pb_folder.setStyleSheet(
+            "background-color: #071e26;"
         )
 
 
@@ -74,11 +81,32 @@ class Browser(QtWidgets.QMainWindow):
 
     def deactivate_item_button(self):
         self.pb_open.setEnabled(False)
-        self.pb_delete.setEnabled(False)
+        self.pb_delete.setEnabled(True)
+        self.pb_folder.setEnabled(True)
         self.pb_open.setStyleSheet(
             "background-color: #071e26;"
         )
         self.pb_delete.setStyleSheet(
+            "background-color: #7D9191;"
+        )
+        self.pb_folder.setStyleSheet(
+            "background-color: #7D9191;"
+        )
+
+        if hasattr(self, "action_ui") and self.action_ui is not None:
+            self.action_ui.action_box.setVisible(False)
+
+    def deactivate_folder_button(self):
+        self.pb_open.setEnabled(False)
+        self.pb_delete.setEnabled(False)
+        self.pb_folder.setEnabled(False)
+        self.pb_open.setStyleSheet(
+            "background-color: #071e26;"
+        )
+        self.pb_delete.setStyleSheet(
+            "background-color: #071e26;"
+        )
+        self.pb_folder.setStyleSheet(
             "background-color: #071e26;"
         )
 
@@ -86,7 +114,7 @@ class Browser(QtWidgets.QMainWindow):
             self.action_ui.action_box.setVisible(False)
 
     def on_asset_clicked(self):
-        self.deactivate_item_button()
+        self.deactivate_folder_button()
 
         self.pb_asset.setEnabled(False)
         self.pb_shot.setEnabled(True)
@@ -117,7 +145,7 @@ class Browser(QtWidgets.QMainWindow):
     def on_shot_clicked(self):
         self.pb_asset.setEnabled(True)
         self.pb_shot.setEnabled(False)
-        self.deactivate_item_button()
+        self.deactivate_folder_button()
 
         self.pb_shot.setStyleSheet(
             "background-color: #071e26;"
@@ -143,6 +171,27 @@ class Browser(QtWidgets.QMainWindow):
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_type, entity, entity.data["shot_type"])
 
+    def create_folder(self):
+
+        if hasattr(self, "selected_item") and self.selected_item:
+
+            entity = self.selected_item.data(QtCore.Qt.UserRole)
+
+            file_path = conf.root + "/" + conf.templates[entity.type]["glob"].format(**entity.data)
+
+            file_path = os.path.normpath(file_path)
+            new_folder_path = os.path.join(file_path, "new_folder")
+            os.makedirs(new_folder_path, exist_ok=True)
+
+            ###reload list
+            self.selected_list.clear()
+            entities = finder.find( self.selected_entity.type, {**entity.data})
+            print(entities)
+
+            for entity in entities:
+                self.addListWidgetItem(self.selected_list, entity, entity.data[ self.selected_entity.type])
+
+
 #Asset clicked
     def on_asset_type_clicked(self, item):
         self.deactivate_item_button()
@@ -159,6 +208,8 @@ class Browser(QtWidgets.QMainWindow):
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_name, entity, entity.data["asset_name"])
 
+        self.selected_item = item
+
     def on_asset_name_clicked(self, item):
         self.deactivate_item_button()
 
@@ -173,6 +224,9 @@ class Browser(QtWidgets.QMainWindow):
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_task, entity, entity.data["asset_task"])
 
+        self.selected_item = item
+        print(entities)
+
     def on_asset_task_clicked(self, item):
         self.deactivate_item_button()
 
@@ -186,6 +240,9 @@ class Browser(QtWidgets.QMainWindow):
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_version, entity, entity.data["asset_version"])
 
+        self.selected_item = item
+        print(entities)
+
     def on_asset_version_clicked(self, item):
         self.deactivate_item_button()
 
@@ -197,6 +254,8 @@ class Browser(QtWidgets.QMainWindow):
 
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_item, entity, entity.data["asset_item"])
+
+        self.selected_item = item
 
     def on_asset_item_selected(self, item):
         self.activate_item_button()
@@ -221,6 +280,9 @@ class Browser(QtWidgets.QMainWindow):
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_name, entity, entity.data["shot_name"])
 
+        self.selected_item = item
+
+
     def on_shot_name_clicked(self, item):
         self.deactivate_item_button()
 
@@ -235,6 +297,8 @@ class Browser(QtWidgets.QMainWindow):
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_task, entity, entity.data["shot_task"])
 
+        self.selected_item = item
+
     def on_shot_task_clicked(self, item):
         self.deactivate_item_button()
 
@@ -248,6 +312,8 @@ class Browser(QtWidgets.QMainWindow):
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_version, entity, entity.data["shot_version"])
 
+        self.selected_item = item
+
     def on_shot_version_clicked(self, item):
         self.deactivate_item_button()
 
@@ -259,6 +325,8 @@ class Browser(QtWidgets.QMainWindow):
 
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_item, entity, entity.data["shot_item"])
+
+        self.selected_item = item
 
     def on_shot_item_selected(self, item):
         self.activate_item_button()
@@ -308,9 +376,7 @@ class Browser(QtWidgets.QMainWindow):
     def delete_selected_asset(self):
         if hasattr(self, "selected_item") and self.selected_item:
             entity = self.selected_item.data(QtCore.Qt.UserRole)
-            file_path = conf.root + "/" + conf.templates["asset_item"]["glob"].format(**entity.data)
-            if not file_path:
-                file_path = conf.root + "/" + conf.templates["shot_item"]["glob"].format(**entity.data)
+            file_path = conf.root + "/" + conf.templates[entity.type]["glob"].format(**entity.data)
 
             file_path = os.path.normpath(file_path)
 
@@ -318,10 +384,16 @@ class Browser(QtWidgets.QMainWindow):
 
             if reply == QtWidgets.QMessageBox.Yes:
                 try:
-                    os.remove(file_path)
+                    if entity.type == "asset_item" or entity.type == "shot_item":
+                        os.remove(file_path)
+                    else:
+                        os.rmdir(file_path)
                     row = self.lw_asset_item.row(self.selected_item)
                     self.lw_asset_item.takeItem(row)
                     print(f"Element delete : {file_path}")
+
+
+
                 except Exception as e:
                     QtWidgets.QMessageBox.warning(self, "Erreur", f"Item can't deleted : {e}")
 
