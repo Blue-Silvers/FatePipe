@@ -171,27 +171,6 @@ class Browser(QtWidgets.QMainWindow):
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_type, entity, entity.data["shot_type"])
 
-    def create_folder(self):
-
-        if hasattr(self, "selected_item") and self.selected_item:
-
-            entity = self.selected_item.data(QtCore.Qt.UserRole)
-
-            file_path = conf.root + "/" + conf.templates[entity.type]["glob"].format(**entity.data)
-
-            file_path = os.path.normpath(file_path)
-            new_folder_path = os.path.join(file_path, "new_folder")
-            os.makedirs(new_folder_path, exist_ok=True)
-
-            ###reload list
-            self.selected_list.clear()
-            entities = finder.find( self.selected_entity.type, {**entity.data})
-            print(entities)
-
-            for entity in entities:
-                self.addListWidgetItem(self.selected_list, entity, entity.data[ self.selected_entity.type])
-
-
 #Asset clicked
     def on_asset_type_clicked(self, item):
         self.deactivate_item_button()
@@ -376,6 +355,7 @@ class Browser(QtWidgets.QMainWindow):
     def delete_selected_asset(self):
         if hasattr(self, "selected_item") and self.selected_item:
             entity = self.selected_item.data(QtCore.Qt.UserRole)
+
             file_path = conf.root + "/" + conf.templates[entity.type]["glob"].format(**entity.data)
 
             file_path = os.path.normpath(file_path)
@@ -388,14 +368,60 @@ class Browser(QtWidgets.QMainWindow):
                         os.remove(file_path)
                     else:
                         os.rmdir(file_path)
-                    row = self.lw_asset_item.row(self.selected_item)
-                    self.lw_asset_item.takeItem(row)
+
+                    if entity.type.endswith("_item"):
+                        row = self.lw_asset_item.row(self.selected_item)
+                        self.lw_asset_item.takeItem(row)
+                    elif entity.type.endswith("_version"):
+                        row = self.lw_asset_version.row(self.selected_item)
+                        self.lw_asset_version.takeItem(row)
+                    elif entity.type.endswith("_task"):
+                        row = self.lw_asset_task.row(self.selected_item)
+                        self.lw_asset_task.takeItem(row)
+                    elif entity.type.endswith("_name"):
+                        row = self.lw_asset_name.row(self.selected_item)
+                        self.lw_asset_name.takeItem(row)
+                    else:
+                        row = self.lw_asset_type.row(self.selected_item)
+                        self.lw_asset_type.takeItem(row)
+
                     print(f"Element delete : {file_path}")
-
-
-
                 except Exception as e:
-                    QtWidgets.QMessageBox.warning(self, "Erreur", f"Item can't deleted : {e}")
+                    QtWidgets.QMessageBox.warning(self, "Error", f"Item can't deleted : {e}")
+
+
+
+    def create_folder(self):
+
+        if hasattr(self, "selected_item") and self.selected_item:
+
+            entity = self.selected_item.data(QtCore.Qt.UserRole)
+
+            file_path = conf.root + "/" + conf.templates[entity.type]["glob"].format(**entity.data)
+
+            file_path = os.path.normpath(file_path)
+            folder_name, ok = QtWidgets.QInputDialog.getText( self, "New Folder", "Folder name :", QtWidgets.QLineEdit.Normal, "new_folder")
+
+            if not ok or not folder_name.strip():
+                return
+
+            new_folder_path = os.path.join(file_path, folder_name.strip())
+
+            try:
+                os.makedirs(new_folder_path, exist_ok=False)
+            except FileExistsError:
+                QtWidgets.QMessageBox.warning(self, "Error", "A folder with this name already exists.")
+                return
+
+            ###reload list
+            self.selected_list.clear()
+            entities = finder.find( self.selected_entity.type, {**entity.data})
+            #print(entities)
+
+            for entity in entities:
+                self.addListWidgetItem(self.selected_list, entity, entity.data[self.selected_entity.type])
+
+
 
 #Main
 if __name__ == '__main__':
