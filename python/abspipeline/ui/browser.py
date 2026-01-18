@@ -11,6 +11,11 @@ from abspipeline.ui import interact as handler
 
 from abspipeline.core import finder
 
+#from typing import Optional
+
+#from spil import FindInAll as Finder, Sid, conf
+
+
 class Browser(QtWidgets.QMainWindow):
     # cb = QtWidgets.QApplication.clipboard()  # exemple de clipboard
 
@@ -421,7 +426,63 @@ class Browser(QtWidgets.QMainWindow):
             for entity in entities:
                 self.addListWidgetItem(self.selected_list, entity, entity.data[self.selected_entity.type])
 
+'''
+def open_browser(
+    sid: Optional[Sid | str] = None, do_new: Optional[bool] = False
+) -> Browser:
+    """
+    Opens a browser window.
+    If the window already exists, brings the existing one to the front.
+    If do_new is set to True, a new Window instance is created
 
+    (The Qt Application must already exist)
+
+    Args:
+        sid: the ui navigates to the given Sid upon startup
+        do_new: if True, opens a new window instance, else brings the existing one to the front (default).
+
+    Returns:
+        the Browser window object
+    """
+
+    global browser_window
+    try:
+        if not browser_window:
+            browser_window = None
+    except:
+        browser_window = None
+
+    if do_new or not browser_window:
+        browser_window = Browser(search=sid)
+        browser_window.show()
+    else:
+        browser_window.activateWindow()
+        browser_window.raise_()
+        browser_window.setWindowState(
+            browser_window.windowState() & ~QtCore.Qt.WindowMinimized
+            | QtCore.Qt.WindowActive
+        )
+        browser_window.show()
+
+    return browser_window
+
+
+def app(sid: Optional[Sid | str] = None) -> None:
+    """
+    Gets or creates a QApplication instance,
+    and opens the Browser window.
+
+    Args:
+        sid: Optional Sid instance or String to start with
+
+    """
+
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)  # fix
+    app = QtWidgets.QApplication.instance() or QtWidgets.QApplication([])
+
+    open_browser(sid)
+    app.exec_()
+'''
 
 #Main
 if __name__ == '__main__':
@@ -430,3 +491,6 @@ if __name__ == '__main__':
     window.show()
 
     app.exec_()
+
+    #sid = "Character\Model\v010\Publish"
+    #app(sid)
