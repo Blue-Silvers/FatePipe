@@ -494,3 +494,9 @@ if __name__ == '__main__':
 
     #sid = "Character\Model\v010\Publish"
     #app(sid)
+
+    '''
+import sys;sys.path.extend(['C:/Users/fury8/PycharmProjects/FatePipe/.venv/Lib/site-packages', 'C:/Users/fury8/PycharmProjects/FatePipe/python'])
+from abspipeline.ui.browser import Browser
+Browser()
+    '''
