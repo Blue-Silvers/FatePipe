@@ -503,4 +503,10 @@ Browser()
 import sys;sys.path.extend(['C:/Users/enzo.lahana/Documents/PycharmProjects/FatePipe/.venv/Lib/site-packages', 'C:/Users/enzo.lahana/Documents/PycharmProjects/FatePipe/python'])
 from abspipeline.ui.browser import Browser
 Browser()
+
+Good version :
+import sys;sys.path.extend(['C:/Users/enzo.lahana/REZ/package/internals/FatePipe/0.1.0/.venv/Lib/site-packages', 'C:/Users/enzo.lahana/REZ/package/internals/FatePipe/0.1.0/python'])
+from abspipeline.ui.browser import Browser
+window = Browser()
+window.show()
     '''
