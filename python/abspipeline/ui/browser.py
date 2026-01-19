@@ -499,4 +499,8 @@ if __name__ == '__main__':
 import sys;sys.path.extend(['C:/Users/fury8/PycharmProjects/FatePipe/.venv/Lib/site-packages', 'C:/Users/fury8/PycharmProjects/FatePipe/python'])
 from abspipeline.ui.browser import Browser
 Browser()
+
+import sys;sys.path.extend(['C:/Users/enzo.lahana/Documents/PycharmProjects/FatePipe/.venv/Lib/site-packages', 'C:/Users/enzo.lahana/Documents/PycharmProjects/FatePipe/python'])
+from abspipeline.ui.browser import Browser
+Browser()
     '''
