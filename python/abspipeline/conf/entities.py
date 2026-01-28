@@ -34,6 +34,34 @@ templates = {
                    },
 }
 
+folderTemplates = {
+    "asset_type": {
+                    #"name": ["Model", "Rig", "Texture"],
+                    "task": ["v010"],
+                    "version": ["Publish", "Work"],
+                   },
+    "asset_name" : {
+                    "task": ["v010"],
+                    "version": ["Publish", "Work"],
+                    },
+    "asset_task" : {
+                    "version": ["Publish", "Work"],
+                    },
+
+    "shot_name": {
+                    "name": ["Sh010"],
+                    "task": ["Animation", "Compositing", "Lighting", "Rendering"],
+                    "version": ["Publish", "Work"],
+                   },
+    "shot_task": {
+                    "task": ["Animation", "Compositing", "Lighting", "Rendering"],
+                    "version": ["Publish", "Work"],
+                   },
+    "shot_version": {
+                    "version": ["Publish", "Work"],
+                   },
+}
+
 # root = "C:/Users/enzo.lahana/PycharmProjects/FatePipe/fileExplorer/Task"
 #root = "C:/Users/fury8/PycharmProjects/FatePipe/fileExplorer/Task"
 #root =  "C:/Users/enzo.lahana/Documents/PycharmProjects/FatePipe/fileExplorer/Task"
