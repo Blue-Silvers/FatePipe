@@ -1,5 +1,6 @@
 import sys
 import os
+import shutil
 import qtpy
 from qtpy import QtCore, QtWidgets, QtGui
 from abspipeline import conf
@@ -372,7 +373,7 @@ class Browser(QtWidgets.QMainWindow):
                     if entity.type == "asset_item" or entity.type == "shot_item":
                         os.remove(file_path)
                     else:
-                        os.rmdir(file_path)
+                        shutil.rmtree(file_path)
 
                     if entity.type.endswith("_item"):
                         row = self.lw_asset_item.row(self.selected_item)
@@ -380,12 +381,15 @@ class Browser(QtWidgets.QMainWindow):
                     elif entity.type.endswith("_version"):
                         row = self.lw_asset_version.row(self.selected_item)
                         self.lw_asset_version.takeItem(row)
+                        self.lw_asset_item.clear()
                     elif entity.type.endswith("_task"):
                         row = self.lw_asset_task.row(self.selected_item)
                         self.lw_asset_task.takeItem(row)
+                        self.lw_asset_version.clear()
                     elif entity.type.endswith("_name"):
                         row = self.lw_asset_name.row(self.selected_item)
                         self.lw_asset_name.takeItem(row)
+                        self.lw_asset_task.clear()
                     else:
                         row = self.lw_asset_type.row(self.selected_item)
                         self.lw_asset_type.takeItem(row)

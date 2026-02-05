@@ -41,24 +41,24 @@ folderTemplates = {
                     "version": ["Publish", "Work"],
                    },
     "asset_name" : {
-                    "task": ["v010"],
+                    #"task": ["v010"],
                     "version": ["Publish", "Work"],
                     },
     "asset_task" : {
-                    "version": ["Publish", "Work"],
+                    #"version": ["Publish", "Work"],
                     },
 
-    "shot_name": {
-                    "name": ["Sh010"],
+    "shot_type": {
+                    #"name": ["Sh010"],
                     "task": ["Animation", "Compositing", "Lighting", "Rendering"],
+                    "version": ["Publish", "Work"],
+                   },
+    "shot_name": {
+                    #"task": ["Animation", "Compositing", "Lighting", "Rendering"],
                     "version": ["Publish", "Work"],
                    },
     "shot_task": {
-                    "task": ["Animation", "Compositing", "Lighting", "Rendering"],
-                    "version": ["Publish", "Work"],
-                   },
-    "shot_version": {
-                    "version": ["Publish", "Work"],
+                    #"version": ["Publish", "Work"],
                    },
 }
 
