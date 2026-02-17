@@ -45,34 +45,36 @@ templates = {
 }
 
 folderTemplates = {
+    "asset": {"name": ["Model", "Rig", "Texture"],
+                    "task": ["v010"],
+                    "version": ["Publish", "Work"],
+              },
     "asset_type": {
-                    "name": ["Model", "Rig", "Texture"],
+                    #"name": ["Model", "Rig", "Texture"],
                     "task": ["v010"],
                     "version": ["Publish", "Work"],
                    },
     "asset_name" : {
-                    "task": ["v010"],
+                    #"task": ["v010"],
                     "version": ["Publish", "Work"],
                     },
     "asset_task" : {
-                    "version": ["Publish", "Work"],
-                    },
-    "asset_version" : {
+                    #"version": ["Publish", "Work"],
                     },
 
+    "shot": {
+                "name": ["Sh010"],
+                "task": ["Animation", "Compositing", "Lighting", "Rendering"],
+                "version": ["Publish", "Work"],
+            },
     "shot_type": {
-                    "name": ["Sh010"],
                     "task": ["Animation", "Compositing", "Lighting", "Rendering"],
                     "version": ["Publish", "Work"],
                    },
     "shot_name": {
-                    "task": ["Animation", "Compositing", "Lighting", "Rendering"],
                     "version": ["Publish", "Work"],
                    },
     "shot_task": {
-                    "version": ["Publish", "Work"],
-                   },
-    "shot_version": {
                    },
 }
 
