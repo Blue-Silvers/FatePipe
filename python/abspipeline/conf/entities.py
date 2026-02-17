@@ -1,6 +1,12 @@
 import os
+import pathlib
+from math import trunc
 
 templates = {
+    "asset": {"glob": "Asset/",
+                   "regex": 'Asset/',
+                   },
+
     "asset_type" : {"glob": "Asset/{asset_type}",
                     "regex": 'Asset/(?P<asset_type>.*)',
                     },
@@ -16,6 +22,10 @@ templates = {
     "asset_item": {"glob": "Asset/{asset_type}/{asset_name}/{asset_task}/{asset_version}/{asset_item}",
                       "regex": 'Asset/(?P<asset_type>.*)/(?P<asset_name>.*)/(?P<asset_task>.*)/(?P<asset_version>.*)/(?P<asset_item>.*)',
                       },
+
+    "shot": {"glob": "Shot/Ep001/",
+                  "regex": 'Shot/Ep001/',
+             },
 
     "shot_type": {"glob": "Shot/Ep001/{shot_type}",
                    "regex": 'Shot/Ep001/(?P<shot_type>.*)',
@@ -36,33 +46,39 @@ templates = {
 
 folderTemplates = {
     "asset_type": {
-                    #"name": ["Model", "Rig", "Texture"],
+                    "name": ["Model", "Rig", "Texture"],
                     "task": ["v010"],
                     "version": ["Publish", "Work"],
                    },
     "asset_name" : {
-                    #"task": ["v010"],
+                    "task": ["v010"],
                     "version": ["Publish", "Work"],
                     },
     "asset_task" : {
-                    #"version": ["Publish", "Work"],
+                    "version": ["Publish", "Work"],
+                    },
+    "asset_version" : {
                     },
 
     "shot_type": {
-                    #"name": ["Sh010"],
+                    "name": ["Sh010"],
                     "task": ["Animation", "Compositing", "Lighting", "Rendering"],
                     "version": ["Publish", "Work"],
                    },
     "shot_name": {
-                    #"task": ["Animation", "Compositing", "Lighting", "Rendering"],
+                    "task": ["Animation", "Compositing", "Lighting", "Rendering"],
                     "version": ["Publish", "Work"],
                    },
     "shot_task": {
-                    #"version": ["Publish", "Work"],
+                    "version": ["Publish", "Work"],
+                   },
+    "shot_version": {
                    },
 }
 
 # root = "C:/Users/enzo.lahana/PycharmProjects/FatePipe/fileExplorer/Task"
 #root = "C:/Users/fury8/PycharmProjects/FatePipe/fileExplorer/Task"
 #root =  "C:/Users/enzo.lahana/Documents/PycharmProjects/FatePipe/fileExplorer/Task"
-root = os.path.join(os.path.dirname(__file__), "../../../fileExplorer/Task")
+#root = os.path.join(os.path.dirname(__file__), "../../../fileExplorer/Task")
+root = (pathlib.Path(__file__).parent.parent.parent.parent /"fileExplorer"/"Root").resolve(True)
+print(root)
