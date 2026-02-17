@@ -55,6 +55,14 @@ class Browser(QtWidgets.QMainWindow):
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_type, entity, entity.data["asset_type"])
 
+        baseEntities = finder.find("asset")
+        for baseEntity in baseEntities:
+            self.selected_entity = baseEntity
+            #self.selected_entity = item.data(QtCore.Qt.UserRole)
+
+            #self.selected_entity.type = baseEntity.data["asset_type"]
+            print("baseEntity.type")
+
         print("Populate test")
 
     def addListWidgetItem(self,listWidget, data, label):
@@ -153,6 +161,8 @@ class Browser(QtWidgets.QMainWindow):
         baseEntities = finder.find("asset")
         for baseEntity in baseEntities:
             self.selected_entity = baseEntity
+            #self.selected_entity = baseEntity, baseEntity.data["asset_type"]
+
             print(baseEntity)
         print("test")
 
@@ -185,6 +195,10 @@ class Browser(QtWidgets.QMainWindow):
         for entity in entities:
             self.addListWidgetItem(self.lw_asset_type, entity, entity.data["shot_type"])
 
+        baseEntities = finder.find("shot")
+        for baseEntity in baseEntities:
+            self.selected_entity = baseEntity
+            print(baseEntity)
         print("test")
 
 #Asset clicked
@@ -210,6 +224,8 @@ class Browser(QtWidgets.QMainWindow):
         self.deactivate_item_button()
 
         itemData = item.data(QtCore.Qt.UserRole)
+        self.selected_entity = item.data(QtCore.Qt.UserRole)
+
 
         self.lw_asset_task.clear()
         self.lw_asset_version.clear()
@@ -227,6 +243,7 @@ class Browser(QtWidgets.QMainWindow):
         self.deactivate_item_button()
 
         itemData = item.data(QtCore.Qt.UserRole)
+        self.selected_entity = item.data(QtCore.Qt.UserRole)
 
         self.lw_asset_version.clear()
         self.lw_asset_item.clear()
@@ -243,6 +260,7 @@ class Browser(QtWidgets.QMainWindow):
         self.deactivate_item_button()
 
         itemData = item.data(QtCore.Qt.UserRole)
+        self.selected_entity = item.data(QtCore.Qt.UserRole)
 
         self.lw_asset_item.clear()
 
@@ -257,6 +275,8 @@ class Browser(QtWidgets.QMainWindow):
         self.activate_item_button()
 
         self.selected_item = item
+        self.selected_entity = item.data(QtCore.Qt.UserRole)
+
         self.handler_buttons_asset()
 
 
@@ -265,6 +285,7 @@ class Browser(QtWidgets.QMainWindow):
         self.deactivate_item_button()
 
         label = item.text()
+        self.selected_entity = item.data(QtCore.Qt.UserRole)
 
         self.lw_asset_name.clear()
         self.lw_asset_task.clear()
@@ -283,6 +304,7 @@ class Browser(QtWidgets.QMainWindow):
         self.deactivate_item_button()
 
         itemData = item.data(QtCore.Qt.UserRole)
+        self.selected_entity = item.data(QtCore.Qt.UserRole)
 
         self.lw_asset_task.clear()
         self.lw_asset_version.clear()
@@ -299,6 +321,7 @@ class Browser(QtWidgets.QMainWindow):
         self.deactivate_item_button()
 
         itemData = item.data(QtCore.Qt.UserRole)
+        self.selected_entity = item.data(QtCore.Qt.UserRole)
 
         self.lw_asset_version.clear()
         self.lw_asset_item.clear()
@@ -314,6 +337,7 @@ class Browser(QtWidgets.QMainWindow):
         self.deactivate_item_button()
 
         itemData = item.data(QtCore.Qt.UserRole)
+        self.selected_entity = item.data(QtCore.Qt.UserRole)
 
         self.lw_asset_item.clear()
 
@@ -328,6 +352,8 @@ class Browser(QtWidgets.QMainWindow):
         self.activate_item_button()
 
         self.selected_item = item
+        self.selected_entity = item.data(QtCore.Qt.UserRole)
+
         self.handler_buttons_asset()
 
 #Open/delete button function
@@ -420,6 +446,7 @@ class Browser(QtWidgets.QMainWindow):
             file_path = conf.root / conf.templates[entity.type]["glob"].format(**entity.data)
 
             #file_path = os.path.normpath(file_path)
+            print(entity.type)
             print (file_path)
             folder_name, ok = QtWidgets.QInputDialog.getText(self, "New Folder", "Folder name :",
                                                              QtWidgets.QLineEdit.Normal, "new_folder")
@@ -431,8 +458,8 @@ class Browser(QtWidgets.QMainWindow):
             print(new_folder_path)
 
             try:
-                #file_path.mkdir(exist_ok=False)
-                os.makedirs(new_folder_path, exist_ok=False)
+                new_folder_path.mkdir(exist_ok=False)
+                #os.makedirs(new_folder_path, exist_ok=False)
             except FileExistsError:
                 QtWidgets.QMessageBox.warning(self, "Error", "A folder with this name already exists.")
                 return

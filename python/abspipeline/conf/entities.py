@@ -3,8 +3,8 @@ import pathlib
 from math import trunc
 
 templates = {
-    "asset": {"glob": "Asset/",
-                   "regex": 'Asset/',
+    "asset": {"glob": "Asset",
+                   "regex": 'Asset',
                    },
 
     "asset_type" : {"glob": "Asset/{asset_type}",
