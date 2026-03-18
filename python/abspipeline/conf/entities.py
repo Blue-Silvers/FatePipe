@@ -1,6 +1,4 @@
-import os
 import pathlib
-from math import trunc
 
 templates = {
     "asset": {"glob": "Asset",
@@ -50,16 +48,13 @@ folderTemplates = {
                     "version": ["Publish", "Work"],
               },
     "asset_type": {
-                    #"name": ["Model", "Rig", "Texture"],
                     "task": ["v010"],
                     "version": ["Publish", "Work"],
                    },
     "asset_name" : {
-                    #"task": ["v010"],
                     "version": ["Publish", "Work"],
                     },
     "asset_task" : {
-                    #"version": ["Publish", "Work"],
                     },
 
     "shot": {
@@ -78,9 +73,5 @@ folderTemplates = {
                    },
 }
 
-# root = "C:/Users/enzo.lahana/PycharmProjects/FatePipe/fileExplorer/Task"
-#root = "C:/Users/fury8/PycharmProjects/FatePipe/fileExplorer/Task"
-#root =  "C:/Users/enzo.lahana/Documents/PycharmProjects/FatePipe/fileExplorer/Task"
-#root = os.path.join(os.path.dirname(__file__), "../../../fileExplorer/Task")
 root = (pathlib.Path(__file__).parent.parent.parent.parent /"fileExplorer"/"Root").resolve(True)
 print(root)

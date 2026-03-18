@@ -1,8 +1,8 @@
 import sys
 import os
 import shutil
-import qtpy
-from qtpy import QtCore, QtWidgets, QtGui
+
+from qtpy import QtCore, QtWidgets
 from abspipeline import conf
 from qtpy.uic import loadUi
 
@@ -13,10 +13,6 @@ ui_path = os.path.join(os.path.dirname(__file__), "qt/browser.ui")
 from abspipeline.ui import interact as handler
 
 from abspipeline.core import finder
-
-#from typing import Optional
-
-#from spil import FindInAll as Finder, Sid, conf
 
 
 class Browser(QtWidgets.QMainWindow):
@@ -62,8 +58,7 @@ class Browser(QtWidgets.QMainWindow):
         self.childType = "asset_type"
 
     def addListWidgetItem(self,listWidget, data, label):
-        self.selected_list = listWidget  #####
-        #self.selected_entity = data
+        self.selected_list = listWidget
         item = QtWidgets.QListWidgetItem()
         item.setData(QtCore.Qt.UserRole, data)
         item.setText(label)
@@ -227,7 +222,7 @@ class Browser(QtWidgets.QMainWindow):
             self.addListWidgetItem(self.lw_asset_task, entity, entity.data["asset_task"])
 
         self.selected_item = item
-        print(entities)
+        #print(entities)
 
     def on_asset_task_clicked(self, item):
         self.deactivate_item_button()
@@ -246,7 +241,7 @@ class Browser(QtWidgets.QMainWindow):
             self.addListWidgetItem(self.lw_asset_version, entity, entity.data["asset_version"])
 
         self.selected_item = item
-        print(entities)
+        #print(entities)
 
     def on_asset_version_clicked(self, item):
         self.deactivate_item_button()
@@ -359,11 +354,9 @@ class Browser(QtWidgets.QMainWindow):
         if hasattr(self, "selected_item") and self.selected_item:
 
             entity = self.selected_item.data(QtCore.Qt.UserRole)
-            file_path = conf.root + "/" + conf.templates["asset_item"]["glob"].format(**entity.data)
+            file_path = conf.root / conf.templates["asset_item"]["glob"].format(**entity.data)
             if not file_path:
-                file_path = conf.root + "/" + conf.templates["shot_item"]["glob"].format(**entity.data)
-
-            file_path = os.path.normpath(file_path)
+                file_path = conf.root / conf.templates["shot_item"]["glob"].format(**entity.data)
 
             action_ui = handler.interact()
             action_ui.init(action_ui, self.hbl_handler)
@@ -377,12 +370,9 @@ class Browser(QtWidgets.QMainWindow):
     def open_selected_asset(self):
         if hasattr(self, "selected_item") and self.selected_item:
             entity = self.selected_item.data(QtCore.Qt.UserRole)
-            file_path = conf.root + "/" + conf.templates["asset_item"]["glob"].format(**entity.data)
+            file_path = conf.root / conf.templates["asset_item"]["glob"].format(**entity.data)
             if not file_path:
-                file_path = conf.root + "/" + conf.templates["shot_item"]["glob"].format(**entity.data)
-
-            file_path = os.path.normpath(file_path)
-
+                file_path = conf.root / conf.templates["shot_item"]["glob"].format(**entity.data)
 
             if file_path and os.path.exists(file_path):
                 if os.name == "nt":
@@ -443,8 +433,7 @@ class Browser(QtWidgets.QMainWindow):
 
             file_path = conf.root / conf.templates[entity.type]["glob"].format(**entity.data)
 
-            folder_name, ok = QtWidgets.QInputDialog.getText(self, "New Folder", "Folder name :",
-                                                             QtWidgets.QLineEdit.Normal, "new_folder")
+            folder_name, ok = QtWidgets.QInputDialog.getText(self, "New Folder", "Folder name :", QtWidgets.QLineEdit.Normal, "new_folder")
 
             if not ok or not folder_name.strip():
                 return
@@ -452,7 +441,6 @@ class Browser(QtWidgets.QMainWindow):
             new_folder_path = file_path / folder_name.strip()
             try:
                 new_folder_path.mkdir(exist_ok=False)
-                #os.makedirs(new_folder_path, exist_ok=False)
             except FileExistsError:
                 QtWidgets.QMessageBox.warning(self, "Error", "A folder with this name already exists.")
                 return
@@ -464,20 +452,16 @@ class Browser(QtWidgets.QMainWindow):
                         os.makedirs(os.path.join(new_folder_path, nameFolderName), exist_ok=False)
                         for taskFolderName in conf.folderTemplates[self.selected_entity.type].get("task"):
                             try:
-                                os.makedirs(os.path.join(os.path.join(new_folder_path, nameFolderName), taskFolderName),
-                                            exist_ok=False)
+                                os.makedirs(os.path.join(os.path.join(new_folder_path, nameFolderName), taskFolderName), exist_ok=False)
                             except FileExistsError:
                                 QtWidgets.QMessageBox.warning(self, "Error",
                                                               "A task subfolder with this name already exists.")
                                 return
                             for entityFolderName in conf.folderTemplates[self.selected_entity.type].get("version"):
                                 try:
-                                    os.makedirs(os.path.join(
-                                        os.path.join(os.path.join(new_folder_path, nameFolderName), taskFolderName),
-                                        entityFolderName), exist_ok=False)
+                                    os.makedirs(os.path.join(os.path.join(os.path.join(new_folder_path, nameFolderName), taskFolderName), entityFolderName), exist_ok=False)
                                 except FileExistsError:
-                                    QtWidgets.QMessageBox.warning(self, "Error",
-                                                                  "A version subfolder with this name already exists.")
+                                    QtWidgets.QMessageBox.warning(self, "Error","A version subfolder with this name already exists.")
                                     return
                     except FileExistsError:
                         QtWidgets.QMessageBox.warning(self, "Error", "A name subfolder with this name already exists.")
@@ -489,11 +473,9 @@ class Browser(QtWidgets.QMainWindow):
                         for versionFolderName in conf.folderTemplates[self.selected_entity.type].get("version"):
                             try:
                                 os.makedirs(
-                                    os.path.join(os.path.join(new_folder_path, taskFolderName), versionFolderName),
-                                    exist_ok=False)
+                                    os.path.join(os.path.join(new_folder_path, taskFolderName), versionFolderName), exist_ok=False)
                             except FileExistsError:
-                                QtWidgets.QMessageBox.warning(self, "Error",
-                                                              "A version subfolder with this name already exists.")
+                                QtWidgets.QMessageBox.warning(self, "Error","A version subfolder with this name already exists.")
                                 return
                     except FileExistsError:
                         QtWidgets.QMessageBox.warning(self, "Error", "A task subfolder with this name already exists.")
@@ -503,8 +485,7 @@ class Browser(QtWidgets.QMainWindow):
                     try:
                         os.makedirs(os.path.join(new_folder_path, versionFolderName), exist_ok=False)
                     except FileExistsError:
-                        QtWidgets.QMessageBox.warning(self, "Error",
-                                                      "A version subfolder with this name already exists.")
+                        QtWidgets.QMessageBox.warning(self, "Error","A version subfolder with this name already exists.")
                         return
 
             ###reload list

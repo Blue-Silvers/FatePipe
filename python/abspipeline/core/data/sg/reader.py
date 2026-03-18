@@ -31,6 +31,3 @@ class SGReader():
                 entities.append(Entity(type=search_type, data=data))
 
         return iter(entities)
-
-
-    #def get(self, ):

@@ -32,6 +32,3 @@ class FSReader():
 
 
         return iter(entities)
-
-
-    #def get(self, ):
