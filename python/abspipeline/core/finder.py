@@ -5,7 +5,7 @@ from abspipeline import conf
 from abspipeline.core.dt.entity import Entity
 from abspipeline.libs import utils
 
-from abspipeline.core import resolve
+from abspipeline.core.data.fs import resolve
 
 
 def find(search_type: str, filters: Optional[dict [str, str]] = None) -> list[Entity]:

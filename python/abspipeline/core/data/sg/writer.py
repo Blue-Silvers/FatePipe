@@ -1,6 +1,6 @@
 from abspipeline.core.dt.entity import Entity
 from typing import Any, Optional
-from abspipeline.core import  connect
+from abspipeline.core.data.sg import connect
 
 sg = connect.get_sg()
 

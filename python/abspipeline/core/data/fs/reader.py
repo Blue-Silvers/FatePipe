@@ -1,4 +1,3 @@
-from abc import abstractmethod
 from typing import Optional, Iterator
 
 from abspipeline.core.dt.entity import Entity
@@ -6,7 +5,8 @@ from pathlib import Path
 from abspipeline import conf
 from abspipeline.libs import utils
 
-from abspipeline.core import resolve
+from abspipeline.core.data.fs import resolve
+
 
 class FSReader():
 
@@ -23,11 +23,7 @@ class FSReader():
         found = Path(conf.root).glob(glob_expression)
         print(f"search: {search_type}")
 
-        entities = []
         for path in found:
             data = resolve.resolve(entity_type=search_type, path=path)
             if data:
-                entities.append(Entity(type=search_type, data=data))
-
-
-        return iter(entities)
+                yield Entity(type=search_type, data=data)
