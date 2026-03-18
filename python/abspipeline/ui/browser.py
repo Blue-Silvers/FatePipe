@@ -20,6 +20,15 @@ class Browser(QtWidgets.QMainWindow):
 
     def __init__(self):
         super(Browser, self).__init__()
+
+        #init self variable to None
+        self.asset_type_comboBox = None
+        self.action_ui = None
+        self.selected_item = None
+        self.selected_entity = None
+        self.selected_list = None
+
+        #init UI
         loadUi(ui_path, self)
         self.setWindowTitle(f"{conf.browser_title} - Browser")
 
@@ -29,9 +38,11 @@ class Browser(QtWidgets.QMainWindow):
         self.pb_open.clicked.connect(self.open_selected_asset)
         self.pb_delete.clicked.connect(self.delete_selected_asset)
         self.pb_folder.clicked.connect(self.create_folder)
-        self.deactivate_folder_button()
+        self.activate_folder_button()
 
         self.populate()
+
+        self.childType = "asset_task"
 
     def fill_asset_type(self):
         self.asset_type_comboBox.clear()
@@ -102,7 +113,7 @@ class Browser(QtWidgets.QMainWindow):
         if hasattr(self, "action_ui") and self.action_ui is not None:
             self.action_ui.action_box.setVisible(False)
 
-    def deactivate_folder_button(self):
+    def activate_folder_button(self):
         self.pb_open.setEnabled(False)
         self.pb_delete.setEnabled(False)
         self.pb_folder.setEnabled(True)
@@ -119,8 +130,25 @@ class Browser(QtWidgets.QMainWindow):
         if hasattr(self, "action_ui") and self.action_ui is not None:
             self.action_ui.action_box.setVisible(False)
 
+    def activate_only_delete_button(self):
+        self.pb_open.setEnabled(False)
+        self.pb_delete.setEnabled(True)
+        self.pb_folder.setEnabled(False)
+        self.pb_open.setStyleSheet(
+            "background-color: #071e26;"
+        )
+        self.pb_delete.setStyleSheet(
+            "background-color: #7D9191;"
+        )
+        self.pb_folder.setStyleSheet(
+            "background-color: #071e26;"
+        )
+
+        if hasattr(self, "action_ui") and self.action_ui is not None:
+            self.action_ui.action_box.setVisible(False)
+
     def on_asset_clicked(self):
-        self.deactivate_folder_button()
+        self.activate_folder_button()
 
         self.pb_asset.setEnabled(False)
         self.pb_shot.setEnabled(True)
@@ -155,7 +183,7 @@ class Browser(QtWidgets.QMainWindow):
     def on_shot_clicked(self):
         self.pb_asset.setEnabled(True)
         self.pb_shot.setEnabled(False)
-        self.deactivate_folder_button()
+        self.activate_folder_button()
 
         self.pb_shot.setStyleSheet(
             "background-color: #071e26;"
@@ -244,7 +272,7 @@ class Browser(QtWidgets.QMainWindow):
         #print(entities)
 
     def on_asset_version_clicked(self, item):
-        self.deactivate_item_button()
+        self.activate_only_delete_button()
 
         itemData = item.data(QtCore.Qt.UserRole)
         self.selected_entity = item.data(QtCore.Qt.UserRole)
@@ -325,7 +353,7 @@ class Browser(QtWidgets.QMainWindow):
         self.selected_item = item
 
     def on_shot_version_clicked(self, item):
-        self.deactivate_item_button()
+        self.activate_only_delete_button()
 
         itemData = item.data(QtCore.Qt.UserRole)
         self.selected_entity = item.data(QtCore.Qt.UserRole)
@@ -452,14 +480,13 @@ class Browser(QtWidgets.QMainWindow):
                         os.makedirs(os.path.join(new_folder_path, nameFolderName), exist_ok=False)
                         for taskFolderName in conf.folderTemplates[self.selected_entity.type].get("task"):
                             try:
-                                os.makedirs(os.path.join(os.path.join(new_folder_path, nameFolderName), taskFolderName), exist_ok=False)
+                                os.makedirs(os.path.join(new_folder_path, nameFolderName, taskFolderName), exist_ok=False)
                             except FileExistsError:
-                                QtWidgets.QMessageBox.warning(self, "Error",
-                                                              "A task subfolder with this name already exists.")
+                                QtWidgets.QMessageBox.warning(self, "Error","A task subfolder with this name already exists.")
                                 return
                             for entityFolderName in conf.folderTemplates[self.selected_entity.type].get("version"):
                                 try:
-                                    os.makedirs(os.path.join(os.path.join(os.path.join(new_folder_path, nameFolderName), taskFolderName), entityFolderName), exist_ok=False)
+                                    os.makedirs(os.path.join(new_folder_path, nameFolderName, taskFolderName, entityFolderName), exist_ok=False)
                                 except FileExistsError:
                                     QtWidgets.QMessageBox.warning(self, "Error","A version subfolder with this name already exists.")
                                     return
@@ -472,8 +499,7 @@ class Browser(QtWidgets.QMainWindow):
                         os.makedirs(os.path.join(new_folder_path, taskFolderName), exist_ok=False)
                         for versionFolderName in conf.folderTemplates[self.selected_entity.type].get("version"):
                             try:
-                                os.makedirs(
-                                    os.path.join(os.path.join(new_folder_path, taskFolderName), versionFolderName), exist_ok=False)
+                                os.makedirs(os.path.join(new_folder_path, taskFolderName, versionFolderName), exist_ok=False)
                             except FileExistsError:
                                 QtWidgets.QMessageBox.warning(self, "Error","A version subfolder with this name already exists.")
                                 return
@@ -509,4 +535,3 @@ if __name__ == '__main__':
     window.show()
 
     app.exec_()
-
