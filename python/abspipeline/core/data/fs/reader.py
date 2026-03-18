@@ -10,7 +10,6 @@ from abspipeline.core import resolve
 
 class FSReader():
 
-    @abstractmethod
     def find(self, search_type: str, filters: Optional[dict [str, str]] = None)-> Iterator[Entity]:
         glob_expression = conf.templates.get(search_type).get("glob")
 
